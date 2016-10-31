@@ -51,9 +51,10 @@ $query = "SELECT * FROM main WHERE first like ".$srch.";" ;
 	   		 	}
 			}
 			else
-			{}
+			{
 
 				// remaining result
+				$lim2 = $lim1 - $count2 ;
 
 				while($row = $result->fetch_assoc()) {
 		    	// echo "im loop" ;
@@ -62,22 +63,48 @@ $query = "SELECT * FROM main WHERE first like ".$srch.";" ;
 		    	// echo "\n\n" ;
 	   		 	}
 
+
+
 				// pattern in the first name or last name 
 				$srch2 = "'%".$str."%'" ;
-				$query = "SELECT * FROM main WHERE first like ".$srch2." OR last like ".$srch2."" ;
+				$query = "SELECT * FROM main WHERE first like ".$srch2.";" ;
 			 	// echo $query ;
 				$result = $conn->query($query);
 				$count3 = mysqli_num_rows($result) ;  // get the count
 				// echo "number of rows are for 3 : ".$count3 ;
 
-				while($row = $result->fetch_assoc()) {
-		    	// echo "im loop" ;
-		    	// echo $row['first'] ;
-		    	$pass[] = $row ;
-		    	// echo "\n\n" ;
-	   		 	}
+				if($count3 >= $lim2)
+				{
 
+					while($row = $result->fetch_assoc()) {
+			    	// echo "im loop" ;
+			    	// echo $row['first'] ;
+			    	$pass[] = $row ;
+			    	// echo "\n\n" ;
+		   		 	}
+		   		}
+		   		else
+		   		{
+		   			while($row = $result->fetch_assoc()) {
+			    	// echo "im loop" ;
+			    	// echo $row['first'] ;
+			    	$pass[] = $row ;
+			    	// echo "\n\n" ;
+		   		 	}
+
+		   		 	$query = "SELECT * FROM main WHERE last like ".$srch2.";" ;
+				 	// echo $query ;
+					$result = $conn->query($query);
+					while($row = $result->fetch_assoc()) {
+			    	// echo "im loop" ;
+			    	// echo $row['first'] ;
+			    	$pass[] = $row ;
+			    	// echo "\n\n" ;
+		   		 	}
+
+		   		}
 			} 
+		}
 		
 
 $names = json_encode($pass) ;
