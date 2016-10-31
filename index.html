@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Search</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		// $(document).ready(function(){
+			function showResult(str){
+				// alert(str) ;
+				if(str.length >= 3)
+				{
+						$.ajax({
+						url : "getResult.php?q="+str ,
+						cache : false ,
+						success : function(result){
+							// alert(result) ;
+							$("#livesearch").html("") ;
+							result = JSON.parse(result) ;
+							console.log(result) ;
+							console.log(result.length) ;
+							var len = result.length ;
+							if(len == 0)
+							{
+								$("#livesearch").html("NO results found :(") ;
+							}
+							var lp = "" ;
+							if(len > 5)
+								lp = 5 ;
+							else
+								lp = len ;
+							for(var i = 0 ; i < lp ; i++)
+							{
+								var name = result[i]["first"] + " " + result[i]["last"] ;
+								var html = "<h5>"+name+"<h5><br>" ;
+								$("#livesearch").append(html) ;
+							}
+						}
+					})
+				}
+				else{
+					$("#livesearch").html("") ;
+				}
+			}
+		// })
+	</script>
+</head>
+<body>
+<form>
+<input type="text" size="30" onkeyup="showResult(this.value)" id="search">
+<div id="livesearch"></div>
+</form>
+</body>
+</html>
